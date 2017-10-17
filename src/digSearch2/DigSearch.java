@@ -1,10 +1,10 @@
 package digSearch2;
 
-public class digSearch {
+public class DigSearch {
     private Element tree;
     private Element current;
 
-    public digSearch() {
+    public DigSearch() {
         tree = new Element('\0');
     }
 
@@ -15,7 +15,7 @@ public class digSearch {
         for (int i = 0; i < word.length() ; i++) {
             element = nextElement;
             while (nextElement != null){
-                if (current.name == word.charAt(i)){
+                if (nextElement.name == word.charAt(i)){
                     break;
                 }
                 nextElement = nextElement.brother;
@@ -36,16 +36,17 @@ public class digSearch {
         if (countCompare == -1){
             return false;   // слово уже имеется
         }
+        current.brother = new Element(word.charAt(countCompare));
+        current = current.brother;
         for (int i = countCompare + 1; i < word.length(); i++) {
-            Element element = new Element(word.charAt(i));
-            element.brother = current;
-            current = element;
+            current.son = new Element(word.charAt(i));
+            current = current.son;
         }
         return true;
     }
 
     public boolean search(String word){
-        if (compare(word + " ") == -1){
+        if (compare(word + "\0") == -1){
             return true;
         } else {
             return false;

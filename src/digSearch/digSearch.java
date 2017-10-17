@@ -9,7 +9,7 @@ public class digSearch {
     /*
     private Map<Character, Map> tree;
 
-    public digSearch() {
+    public DigSearch() {
         tree = new HashMap<>();
     }
 
