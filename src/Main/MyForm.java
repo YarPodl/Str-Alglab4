@@ -15,7 +15,6 @@ public class MyForm extends JFrame {
 
     public MyForm() {
         super();
-        //UIManager.getSystemLookAndFeelClassName ();
         setMinimumSize(new Dimension(300, 300));
         setSize(450, 300);
         setVisible(true);
