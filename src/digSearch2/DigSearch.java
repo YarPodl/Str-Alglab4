@@ -5,26 +5,25 @@ public class DigSearch {
     private Element current;
 
     public DigSearch() {
-        tree = new Element('\0');
+        tree = null;
     }
 
 
     private int compare(String word){   // ищет в дереве совпадения, возвращает число совпадений и
                                        // присваивает "current" последнюю совпадающую вершину
         Element element, nextElement = tree;
-        for (int i = 0; i < word.length() ; i++) {
+        block:
+        for (int i = 0; i < word.length(); i++) {
             element = nextElement;
-            while (nextElement != null){
-                if (nextElement.name == word.charAt(i)){
-                    break;
+            while (nextElement != null) {
+                if (nextElement.name == word.charAt(i)) {
+                    nextElement = nextElement.son;
+                    continue block;
                 }
                 nextElement = nextElement.brother;
             }
-            if (nextElement == null){
-                current = element;
-                return i;
-            }
-            nextElement = nextElement.son;
+            current = element;
+            return i;
         }
         return -1;
     }
@@ -32,13 +31,19 @@ public class DigSearch {
 
     public boolean add(String word){
         word += "\0";
-        int countCompare = compare(word);
-        if (countCompare == -1){
-            return false;   // слово уже имеется
+        int countOfSimilarity;
+        if (tree != null) {
+            countOfSimilarity = compare(word);
+            if (countOfSimilarity == -1) {
+                return false;   // слово уже имеется
+            }
+            current.brother = new Element(word.charAt(countOfSimilarity));
+            current = current.brother;
+        } else {
+            countOfSimilarity = 0;
+            current = tree = new Element(word.charAt(0));
         }
-        current.brother = new Element(word.charAt(countCompare));
-        current = current.brother;
-        for (int i = countCompare + 1; i < word.length(); i++) {
+        for (int i = countOfSimilarity + 1; i < word.length(); i++) {
             current.son = new Element(word.charAt(i));
             current = current.son;
         }
@@ -46,11 +51,7 @@ public class DigSearch {
     }
 
     public boolean search(String word){
-        if (compare(word + "\0") == -1){
-            return true;
-        } else {
-            return false;
-        }
+        return compare(word + "\0") == -1;
     }
 
     private class Element {
@@ -58,7 +59,7 @@ public class DigSearch {
         Element brother;
         Element son;
 
-        public Element(char name) {
+        Element(char name) {
             this.name = name;
             brother = null;
             son = null;
